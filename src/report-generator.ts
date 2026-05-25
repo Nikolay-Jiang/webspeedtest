@@ -21,17 +21,12 @@ function generateSummary(results: TestResult[]): string {
   const total = results.length;
   const successCount = results.filter(r => r.failure === null).length;
   const failureCount = total - successCount;
-  const successResults = results.filter(r => r.failure === null && r.averages.totalTime >= 0);
-  const avgResponseTime = successResults.length > 0
-    ? (successResults.reduce((sum, r) => sum + r.averages.totalTime, 0) / successResults.length).toFixed(1)
-    : '—';
 
   return `
     <div class="summary">
       <div class="summary-item"><span class="summary-label">Total URLs:</span><span class="summary-value">${total}</span></div>
       <div class="summary-item"><span class="summary-label">Success:</span><span class="summary-value success">${successCount}</span></div>
       <div class="summary-item"><span class="summary-label">Failed:</span><span class="summary-value failure">${failureCount}</span></div>
-      <div class="summary-item"><span class="summary-label">Avg Response Time:</span><span class="summary-value">${avgResponseTime} ms</span></div>
     </div>
   `;
 }
@@ -159,6 +154,9 @@ function generateHtml(data: ReportData): string {
     body { font-family: system-ui, -apple-system, sans-serif; background: #f8fafc; color: #1e293b; padding: 2rem; }
     .container { max-width: 1200px; margin: 0 auto; }
     h1 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.25rem; color: #0f172a; }
+    .github-link { font-size: 0.875rem; color: #3b82f6; margin-bottom: 0.25rem; }
+    .github-link a { color: #3b82f6; text-decoration: none; }
+    .github-link a:hover { text-decoration: underline; }
     .timestamp { font-size: 0.875rem; color: #64748b; margin-bottom: 1.5rem; }
     .summary { display: flex; gap: 2rem; padding: 1rem 1.5rem; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 1.5rem; flex-wrap: wrap; }
     .summary-item { display: flex; flex-direction: column; }
@@ -185,6 +183,7 @@ function generateHtml(data: ReportData): string {
 <body>
   <div class="container">
     <h1>Website Speed Test Report</h1>
+    <p class="github-link"><a href="https://github.com/Nikolay-Jiang/webspeedtest" target="_blank" rel="noopener noreferrer">GitHub: Nikolay-Jiang/webspeedtest</a></p>
     <p class="timestamp">Generated: ${escapeHtml(formattedDate)}</p>
     ${generateSummary(results)}
     ${generateTable(results)}
